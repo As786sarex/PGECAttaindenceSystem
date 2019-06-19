@@ -4,4 +4,13 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="lightWhite">#fefefe</color>
+    <color name="colorBlack">#000000</color>
+    <color name="lightBlack">#F9FBE7</color>
+    <color name="lightBlue">#29B6F6</color>
+    <color name="BarcodeActBackground">#D50001</color>
+    <color name="BarcodeActStatusBarColor">#c4001d</color>
+    <string name="emailEditTransition">Email transition</string>
+    <string name="passEditTransition">password transition</string>
+    <string name="ACEditTransition">ACode transition</string>
+
 </resources>

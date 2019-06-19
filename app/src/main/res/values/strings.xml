@@ -6,4 +6,5 @@
     <string name="orText">Random ImageView</string>
     <string name="log_in">Log In</string>
     <string name="RegisterButton">Register Now</string>
+    <string name="cardTransition">cardview transition</string>
 </resources>

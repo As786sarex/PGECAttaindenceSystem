@@ -17,17 +17,13 @@ import com.wildcardenter.myfab.pgecattaindencesystem.R;
  */
 public class TeacherSignUpFragment extends Fragment {
 
-
-    public TeacherSignUpFragment() {
-        // Required empty public constructor
-    }
-
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_teacher_sign_up, container, false);
+        View v=inflater.inflate(R.layout.fragment_teacher_sign_up, container, false);
+
+
+        return v;
     }
 
 }
