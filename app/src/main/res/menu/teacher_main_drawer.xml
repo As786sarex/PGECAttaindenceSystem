@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/teacher_open_generator_frag" android:title="Generate QR Code"/>
+    <item android:id="@+id/teacher_generate_report_frag" android:title="Generate Report"/>
+
+</menu>

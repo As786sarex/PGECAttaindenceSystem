@@ -70,8 +70,8 @@ public class LoginActivity extends AppCompatActivity {
     public void generatePdf(View view) {
         ArrayList<Attendance> attendances = new ArrayList<>();
         HashMap<String, Resposnse> hashMap = new HashMap<>();
-        Resposnse resposnsee = new Resposnse("35000116047", "vcvbcvbvbvbvcv", 4
-                , System.currentTimeMillis(), "Asif Mondal");
+        Resposnse resposnsee = new Resposnse("35000116047", "vcvbcvbvbvbvcv"
+                , System.currentTimeMillis());
         for (int i = 0; i < 10; i++) {
             hashMap.put("no " + i, resposnsee);
         }

@@ -4,20 +4,18 @@ import java.util.HashMap;
 
 public class Teacher {
     private String name;
-    private String uid;
     private String email;
     private boolean isVerified;
     private String accessCode;
-    private HashMap<String,AllotedSubjects> allotedSubjects;
+    private HashMap<String,String> allottedSubjects;
 
-    public Teacher(String name, String uid, String email,
-                   boolean isVerified, String accessCode, HashMap<String, AllotedSubjects> allotedSubjects) {
+    public Teacher(String name, String email,
+                   boolean isVerified, String accessCode, HashMap<String, String> allottedSubjects) {
         this.name = name;
-        this.uid = uid;
         this.email = email;
         this.isVerified = isVerified;
         this.accessCode = accessCode;
-        this.allotedSubjects = allotedSubjects;
+        this.allottedSubjects = allottedSubjects;
     }
 
     public String getName() {
@@ -26,14 +24,6 @@ public class Teacher {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
     }
 
     public String getEmail() {
@@ -60,23 +50,22 @@ public class Teacher {
         this.accessCode = accessCode;
     }
 
-    public HashMap<String, AllotedSubjects> getAllotedSubjects() {
-        return allotedSubjects;
+    public HashMap<String, String> getAllottedSubjects() {
+        return allottedSubjects;
     }
 
-    public void setAllotedSubjects(HashMap<String, AllotedSubjects> allotedSubjects) {
-        this.allotedSubjects = allotedSubjects;
+    public void setAllottedSubjects(HashMap<String, String> allottedSubjects) {
+        this.allottedSubjects = allottedSubjects;
     }
 
     @Override
     public String toString() {
         return "Teacher{" +
                 "name='" + name + '\'' +
-                ", uid='" + uid + '\'' +
                 ", email='" + email + '\'' +
                 ", isPending=" + isVerified +
                 ", accessCode='" + accessCode + '\'' +
-                ", allotedSubjects=" + allotedSubjects +
+                ", allottedSubjects=" + allottedSubjects +
                 '}';
     }
 }

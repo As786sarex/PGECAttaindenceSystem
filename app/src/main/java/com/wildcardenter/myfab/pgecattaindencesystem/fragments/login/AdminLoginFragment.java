@@ -12,15 +12,9 @@ import android.view.ViewGroup;
 
 import com.wildcardenter.myfab.pgecattaindencesystem.R;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class AdminLoginFragment extends Fragment {
 
 
-    public AdminLoginFragment() {
-        // Required empty public constructor
-    }
 
 
     @Override

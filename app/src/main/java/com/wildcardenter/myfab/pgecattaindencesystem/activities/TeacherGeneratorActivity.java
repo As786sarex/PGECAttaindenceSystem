@@ -50,7 +50,7 @@ public class TeacherGeneratorActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            subCode = bundle.getString("subCode");
+            subCode = bundle.getString("Sub_code");
         }
         Date date = new Date();
         genDate=SimpleDateFormat.getDateInstance().format(date);

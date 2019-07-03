@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+    <item android:id="@+id/startScan"
+        android:title="Start Scanning"/>
+    <item android:id="@+id/openStudentReport"
+        android:title="Generate Report"/>
+    <item
+        android:id="@+id/student_nav_scanQR"
+        android:title="Scan QR Code"/>
+
+    <item android:id="@+id/addtemp"
+        android:title="add"/>
+</menu>

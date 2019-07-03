@@ -41,6 +41,7 @@ public class TeacherLoginFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_teacher_login, container, false);
+        firebaseAuth=FirebaseAuth.getInstance();
         teacherRegister=view.findViewById(R.id.TeacherGoToSignUpBtn);
         teacherEmail=view.findViewById(R.id.TeacherSignInEmail);
         teacherPassword=view.findViewById(R.id.TeacherSignInPassword);
@@ -52,7 +53,7 @@ public class TeacherLoginFragment extends Fragment {
             String email = teacherEmail.getText().toString().trim();
             String pass = teacherPassword.getText().toString().trim();
             String accessCode = teacherAccessCode.getText().toString().trim();
-            if (email.contains("@") && !pass.isEmpty() && !accessCode.isEmpty()&&accessCode.length()!=4) {
+            if (email.contains("@") && !pass.isEmpty() && !accessCode.isEmpty()&& accessCode.length()==4) {
                 attemptTeacherLogin(email, pass, Integer.parseInt(accessCode));
             } else {
                 Toast.makeText(getContext(), "Fields Required", Toast.LENGTH_SHORT).show();
@@ -86,8 +87,9 @@ public class TeacherLoginFragment extends Fragment {
                                 if (student.getAccessCode() == accessCode) {
                                     dialog.cancel();
                                     startActivity(new Intent(getActivity(), StudentLandingActivity.class));
-                                    getActivity().finish();
                                     Toast.makeText(getContext(), "Welcome", Toast.LENGTH_SHORT).show();
+                                    getActivity().finish();
+
                                 } else {
                                     Toast.makeText(getContext(), "Access Code Does Not Match", Toast.LENGTH_SHORT).show();
                                     firebaseAuth.signOut();

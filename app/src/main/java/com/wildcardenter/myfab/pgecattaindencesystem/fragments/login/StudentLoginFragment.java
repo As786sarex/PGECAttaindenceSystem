@@ -3,6 +3,7 @@ package com.wildcardenter.myfab.pgecattaindencesystem.fragments.login;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,14 +17,29 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.wildcardenter.myfab.pgecattaindencesystem.R;
 import com.wildcardenter.myfab.pgecattaindencesystem.activities.StudentLandingActivity;
+import com.wildcardenter.myfab.pgecattaindencesystem.helpers.Constants;
+import com.wildcardenter.myfab.pgecattaindencesystem.helpers.SharedPref;
 import com.wildcardenter.myfab.pgecattaindencesystem.models.Student;
+
+import java.util.Set;
+
+import static com.wildcardenter.myfab.pgecattaindencesystem.helpers.Constants.LOGIN_TYPE_FILE;
+import static com.wildcardenter.myfab.pgecattaindencesystem.helpers.Constants.NAME;
+import static com.wildcardenter.myfab.pgecattaindencesystem.helpers.Constants.ROLL_NO;
+import static com.wildcardenter.myfab.pgecattaindencesystem.helpers.Constants.STUDENT_SUBCODE_REF;
+import static com.wildcardenter.myfab.pgecattaindencesystem.helpers.Constants.TYPE_STRING;
+import static com.wildcardenter.myfab.pgecattaindencesystem.helpers.Constants.TYPE_STRING_SET;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,6 +52,8 @@ public class StudentLoginFragment extends Fragment {
     private EditText studentEmail, studentPassword, studentAccessCode;
     private Button studentLogin;
     private FirebaseAuth firebaseAuth;
+    SharedPref pref;
+    SharedPref sharedPref;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -48,6 +66,8 @@ public class StudentLoginFragment extends Fragment {
         studentAccessCode = view.findViewById(R.id.studentSignInPrivateAC);
         studentLogin = view.findViewById(R.id.studentSignInButton);
         firebaseAuth = FirebaseAuth.getInstance();
+        pref=SharedPref.getSharedPref(getContext(), Constants.STUDENT_SUBCODES_FILE);
+        sharedPref=SharedPref.getSharedPref(getContext(),LOGIN_TYPE_FILE);
         register.setOnClickListener(v -> {
             getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null)
                     .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
@@ -89,6 +109,19 @@ public class StudentLoginFragment extends Fragment {
                             Student student = dataSnapshot.getValue(Student.class);
                             if (student != null) {
                                 if (student.getAccessCode() == accessCode) {
+                                    FirebaseFirestore.getInstance().collection(STUDENT_SUBCODE_REF)
+                                            .document(task.getResult().getUser().getUid()).get().addOnCompleteListener(task1 -> {
+                                                if (task1.isSuccessful()){
+                                                    if (task1.getResult()!=null) {
+                                                        for (String s:task1.getResult().getData().keySet()){
+                                                            pref.setData(s,s,TYPE_STRING);
+                                                        }
+
+                                                    }
+                                                }
+                                            });
+                                    sharedPref.setData(NAME,student.getName(),TYPE_STRING);
+                                    sharedPref.setData(ROLL_NO,student.getRollno(),TYPE_STRING);
                                     dialog.cancel();
                                     startActivity(new Intent(getActivity(), StudentLandingActivity.class));
                                     getActivity().finish();

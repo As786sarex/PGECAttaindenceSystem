@@ -3,18 +3,29 @@ package com.wildcardenter.myfab.pgecattaindencesystem.helpers;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.Map;
+import java.util.Set;
+
 import static com.wildcardenter.myfab.pgecattaindencesystem.helpers.Constants.TYPE_BOOLEAN;
 import static com.wildcardenter.myfab.pgecattaindencesystem.helpers.Constants.TYPE_FLOAT;
 import static com.wildcardenter.myfab.pgecattaindencesystem.helpers.Constants.TYPE_INTEGER;
 import static com.wildcardenter.myfab.pgecattaindencesystem.helpers.Constants.TYPE_STRING;
+import static com.wildcardenter.myfab.pgecattaindencesystem.helpers.Constants.TYPE_STRING_SET;
 
 public class SharedPref {
 
 
     private SharedPreferences sharedPreferences;
+    private static SharedPref pref;
 
-    public SharedPref(Context context,String filename) {
+    private SharedPref(Context context,String filename) {
         sharedPreferences=context.getSharedPreferences(filename,Context.MODE_PRIVATE);
+    }
+    public static SharedPref getSharedPref(Context context,String filename){
+        if (pref==null){
+            pref=new SharedPref(context,filename);
+        }
+        return pref;
     }
 
 
@@ -50,5 +61,9 @@ public class SharedPref {
             data=sharedPreferences.getFloat(key,1f);
         }
         return data;
+    }
+
+    public Map<String,?> getAllvalues() {
+        return sharedPreferences.getAll();
     }
 }
