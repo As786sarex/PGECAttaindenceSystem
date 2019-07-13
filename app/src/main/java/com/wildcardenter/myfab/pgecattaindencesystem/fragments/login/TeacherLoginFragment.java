@@ -3,11 +3,8 @@ package com.wildcardenter.myfab.pgecattaindencesystem.fragments.login;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,14 +14,24 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.wildcardenter.myfab.pgecattaindencesystem.R;
-import com.wildcardenter.myfab.pgecattaindencesystem.activities.StudentLandingActivity;
-import com.wildcardenter.myfab.pgecattaindencesystem.models.Student;
+import com.wildcardenter.myfab.pgecattaindencesystem.activities.TeacherLandingActivity;
+import com.wildcardenter.myfab.pgecattaindencesystem.helpers.Constants;
+import com.wildcardenter.myfab.pgecattaindencesystem.helpers.SharedPref;
+import com.wildcardenter.myfab.pgecattaindencesystem.models.Teacher;
+
+import static com.wildcardenter.myfab.pgecattaindencesystem.helpers.Constants.EMAIL;
+import static com.wildcardenter.myfab.pgecattaindencesystem.helpers.Constants.LOGIN_TYPE_FILE;
+import static com.wildcardenter.myfab.pgecattaindencesystem.helpers.Constants.NAME;
+import static com.wildcardenter.myfab.pgecattaindencesystem.helpers.Constants.TYPE_STRING;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,27 +40,29 @@ public class TeacherLoginFragment extends Fragment {
 
     private static final String TAG = "TeacherLoginFragment";
 
-    private TextView teacherRegister;
     private EditText teacherEmail, teacherPassword, teacherAccessCode;
-    private Button teacherLogin;
     private FirebaseAuth firebaseAuth;
+    private SharedPref pref;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view= inflater.inflate(R.layout.fragment_teacher_login, container, false);
-        firebaseAuth=FirebaseAuth.getInstance();
-        teacherRegister=view.findViewById(R.id.TeacherGoToSignUpBtn);
-        teacherEmail=view.findViewById(R.id.TeacherSignInEmail);
-        teacherPassword=view.findViewById(R.id.TeacherSignInPassword);
-        teacherAccessCode=view.findViewById(R.id.TeacherSignInAccessCode);
-        teacherLogin=view.findViewById(R.id.TeacherLoginButton);
-        teacherRegister.setOnClickListener(v-> getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null)
-                .replace(R.id.loginFragContainer,new TeacherSignUpFragment()).commit());
+        View view = inflater.inflate(R.layout.fragment_teacher_login, container, false);
+        firebaseAuth = FirebaseAuth.getInstance();
+        SharedPref.setNullMethod();
+        pref = SharedPref.getSharedPref(getContext(), Constants.TEACHER_ALLOTED_SUBS);
+        TextView teacherRegister = view.findViewById(R.id.TeacherGoToSignUpBtn);
+        teacherEmail = view.findViewById(R.id.TeacherSignInEmail);
+        teacherPassword = view.findViewById(R.id.TeacherSignInPassword);
+        teacherAccessCode = view.findViewById(R.id.TeacherSignInAccessCode);
+        Button teacherLogin = view.findViewById(R.id.TeacherLoginButton);
+        teacherRegister.setOnClickListener(v -> getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null)
+                .replace(R.id.loginFragContainer, new TeacherSignUpFragment()).commit());
         teacherLogin.setOnClickListener(v -> {
             String email = teacherEmail.getText().toString().trim();
             String pass = teacherPassword.getText().toString().trim();
             String accessCode = teacherAccessCode.getText().toString().trim();
-            if (email.contains("@") && !pass.isEmpty() && !accessCode.isEmpty()&& accessCode.length()==4) {
+            if (email.contains("@") && !pass.isEmpty() && !accessCode.isEmpty() && accessCode.length() == 4) {
                 attemptTeacherLogin(email, pass, Integer.parseInt(accessCode));
             } else {
                 Toast.makeText(getContext(), "Fields Required", Toast.LENGTH_SHORT).show();
@@ -82,11 +91,21 @@ public class TeacherLoginFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
-                            Student student = dataSnapshot.getValue(Student.class);
-                            if (student != null) {
-                                if (student.getAccessCode() == accessCode) {
+                            Teacher teacher = dataSnapshot.getValue(Teacher.class);
+                            if (teacher != null) {
+                                if (teacher.getAccessCode().equals(String.valueOf(accessCode))) {
+                                    Log.e("ac","ac successful");
                                     dialog.cancel();
-                                    startActivity(new Intent(getActivity(), StudentLandingActivity.class));
+                                    if (teacher.getAllottedSubjects() != null) {
+                                        for (String s : teacher.getAllottedSubjects().keySet()) {
+                                            pref.setData(s, s, TYPE_STRING);
+                                        }
+                                        SharedPref.setNullMethod();
+                                        SharedPref sharedPref = SharedPref.getSharedPref(getContext(), LOGIN_TYPE_FILE);
+                                        sharedPref.setData(EMAIL, teacher.getEmail(), TYPE_STRING);
+                                        sharedPref.setData(NAME, teacher.getName(), TYPE_STRING);
+                                    }
+                                    startActivity(new Intent(getActivity(), TeacherLandingActivity.class));
                                     Toast.makeText(getContext(), "Welcome", Toast.LENGTH_SHORT).show();
                                     getActivity().finish();
 

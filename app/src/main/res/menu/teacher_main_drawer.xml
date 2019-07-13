@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/teacher_open_generator_frag" android:title="Generate QR Code"/>
-    <item android:id="@+id/teacher_generate_report_frag" android:title="Generate Report"/>
+    <group>
+        <item
+            android:id="@+id/teacher_open_generator_frag"
+            android:title="Generate QR Code"
+            android:icon="@drawable/ic_qr_code"/>
+        <item
+            android:id="@+id/teacher_generate_report_frag"
+            android:title="Generate Report" />
+        <item
+            android:id="@+id/CreateNotification"
+            android:title="Send Notification"
+            android:icon="@drawable/ic_chat_bubble_outline_black_24dp"/>
+    </group>
+    <item android:title="options">
+        <menu>
+            <item
+                android:id="@+id/drawer_teacher_settings"
+                android:icon="@drawable/ic_settings_black_24dp"
+                android:title="Settings" />
+            <item
+                android:id="@+id/drawer_teacher_logout"
+                android:icon="@drawable/ic_input_black_24dp"
+                android:title="Log out" />
+        </menu>
+    </item>
 
 </menu>

@@ -37,6 +37,7 @@ public class TeacherSubChooserFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_teacher_sub_chooser_fragmnt, container, false);
+        SharedPref.setNullMethod();
         pref=SharedPref.getSharedPref(getContext(), TEACHER_ALLOTED_SUBS);
 
         AlertDialog.Builder builder=new AlertDialog.Builder(getContext(),R.style.Theme_AppCompat_Light_Dialog_Alert);

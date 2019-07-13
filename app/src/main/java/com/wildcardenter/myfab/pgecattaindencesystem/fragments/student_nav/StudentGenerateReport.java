@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.wildcardenter.myfab.pgecattaindencesystem.R;
+import com.wildcardenter.myfab.pgecattaindencesystem.helpers.NotificationHelper;
 import com.wildcardenter.myfab.pgecattaindencesystem.helpers.SharedPref;
 
 import java.util.Map;
@@ -24,6 +25,7 @@ import static com.wildcardenter.myfab.pgecattaindencesystem.helpers.Constants.ST
  */
 public class StudentGenerateReport extends Fragment {
     private SharedPref pref;
+    NotificationHelper helper;
 
 
     @Override
@@ -31,9 +33,11 @@ public class StudentGenerateReport extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_student_generate_report, container, false);
+        SharedPref.setNullMethod();
         pref = SharedPref.getSharedPref(getContext(), STUDENT_SUBCODES_FILE);
         RadioGroup rgp = view.findViewById(R.id.studentReportGenRadioGroup);
         RadioGroup.LayoutParams rprms;
+        NotificationHelper helper=new NotificationHelper(getContext());
         Map<String, ?> col = pref.getAllvalues();
         if (col != null) {
             for (Object s : col.values()) {

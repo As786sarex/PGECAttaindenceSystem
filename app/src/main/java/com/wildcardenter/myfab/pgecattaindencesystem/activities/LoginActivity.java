@@ -1,11 +1,13 @@
 package com.wildcardenter.myfab.pgecattaindencesystem.activities;
 
-import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.common.util.IOUtils;
@@ -30,22 +32,42 @@ import com.wildcardenter.myfab.pgecattaindencesystem.fragments.login.StudentLogi
 import com.wildcardenter.myfab.pgecattaindencesystem.fragments.login.TeacherLoginFragment;
 import com.wildcardenter.myfab.pgecattaindencesystem.models.Attendance;
 import com.wildcardenter.myfab.pgecattaindencesystem.models.Resposnse;
+import com.wildcardenter.myfab.pgecattaindencesystem.utils.NetworkStateReceiver;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
+    private NetworkStateReceiver receiver;
+    private AlertDialog dialog;
+    private IntentFilter filter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         getWindow().setStatusBarColor(getResources().getColor(R.color.lightBlue));
+        dialog = new AlertDialog.Builder(this, R.style.dialog_anim)
+                .setTitle("No Internet Connection!!!")
+                .setMessage("Make sure that you're connected to the internet.")
+                .setCancelable(false).create();
+        receiver = new NetworkStateReceiver(dialog);
+        filter = new IntentFilter();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(receiver, filter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
     }
 
     public void openTeacherLoginFragment(View view) {
@@ -58,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
     public void openAdminLoginFragment(View view) {
         getSupportFragmentManager().beginTransaction()
                 .addToBackStack(null)
-                .replace(R.id.loginFragContainer,new AdminLoginFragment()).commit();
+                .replace(R.id.loginFragContainer, new AdminLoginFragment()).commit();
 
     }
 
@@ -68,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void generatePdf(View view) {
-        ArrayList<Attendance> attendances = new ArrayList<>();
+       /* ArrayList<Attendance> attendances = new ArrayList<>();
         HashMap<String, Resposnse> hashMap = new HashMap<>();
         Resposnse resposnsee = new Resposnse("35000116047", "vcvbcvbvbvbvcv"
                 , System.currentTimeMillis());
@@ -76,13 +98,23 @@ public class LoginActivity extends AppCompatActivity {
             hashMap.put("no " + i, resposnsee);
         }
 
-        Attendance attendance = new Attendance(System.currentTimeMillis(), 322,
+        Attendance attendance = new Attendance(System.currentTimeMillis(),
                 hashMap, SimpleDateFormat.getDateInstance().format(new Date()));
 
         for (int i = 0; i < 15; i++) {
             attendances.add(attendance);
         }
-        new ExecutorThread(attendances).start();
+        new ExecutorThread(attendances).start();*/
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.dialog_anim);
+        builder.setView(R.layout.dialog_successful).setCancelable(false);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        View v = getLayoutInflater().inflate(R.layout.dialog_successful, null);
+        v.findViewById(R.id.success_dialog_btn).setOnClickListener(vw -> {
+            dialog.dismiss();
+            finish();
+        });
     }
 
     private class ExecutorThread extends Thread {
@@ -99,8 +131,8 @@ public class LoginActivity extends AppCompatActivity {
 
             try {
 
-                String filename = Environment.getExternalStorageDirectory()+"/"+System.currentTimeMillis() + ".pdf";
-                File file=new File(filename);
+                String filename = Environment.getExternalStorageDirectory() + "/" + System.currentTimeMillis() + ".pdf";
+                File file = new File(filename);
                 PdfWriter writer = new PdfWriter(file);
 
                 PdfDocument document = new PdfDocument(writer);
@@ -129,7 +161,7 @@ public class LoginActivity extends AppCompatActivity {
                 for (Attendance attendance : list) {
                     table.addCell(new Cell().add(new Paragraph(String.valueOf(count))));
                     table.addCell(new Cell().add(new Paragraph(attendance.getDate())));
-                    table.addCell(new Cell().add(new Paragraph(String.valueOf(attendance.getNoOfStudent()))));
+                    table.addCell(new Cell().add(new Paragraph(String.valueOf(30))));
                     List listt = new List();
                     for (Resposnse resposnse : attendance.getPresentStudentList().values()) {
                         listt.add(new ListItem(resposnse.getRoll_no())).setListSymbol(ListNumberingType.ROMAN_UPPER);
@@ -140,7 +172,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 pdf.add(table);
                 pdf.close();
-                Log.d(TAG, "run: Successfully stored on "+filename);
+                Log.d(TAG, "run: Successfully stored on " + filename);
 
 
             } catch (Exception e) {
@@ -151,10 +183,9 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0){
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
     }

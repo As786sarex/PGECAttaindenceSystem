@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content" android:layout_gravity="center">
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="220dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="success.json"
+        app:lottie_loop="false" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Successful"
+        android:textSize="20sp"
+        android:layout_gravity="center_horizontal"
+        android:textStyle="bold"
+        android:fontFamily="@font/raleway_bold"
+        android:textColor="#009688"/>
+    <Button
+        android:id="@+id/success_dialog_btn"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.ActionButton.CloseMode"
+        android:text="Ok..Good!"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:textColor="@color/lightWhite"
+        android:fontFamily="@font/raleway_bold"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/dialog_grad"/>
+
+</LinearLayout>

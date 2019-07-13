@@ -12,6 +12,11 @@
     <style parent="ThemeOverlay.AppCompat.Dark.ActionBar" name="AppTheme.AppBarOverlay"/>
 
     <style parent="ThemeOverlay.AppCompat.Light" name="AppTheme.PopupOverlay"/>
+    <style name="dialog_anim" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowEnterAnimation">@anim/slide_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_down</item>
+
+    </style>
 
 
 </resources>

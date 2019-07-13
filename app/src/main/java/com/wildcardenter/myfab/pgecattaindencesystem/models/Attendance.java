@@ -5,12 +5,10 @@ import java.util.HashMap;
 public class Attendance {
     private Object timestamp;
     private String date;
-    private int noOfStudent;
     private HashMap<String,Resposnse> presentStudentList;
 
-    public Attendance(Object timestamp, int noOfStudent, HashMap<String, Resposnse> presentStudentList,String date) {
+    public Attendance(Object timestamp, HashMap<String, Resposnse> presentStudentList,String date) {
         this.timestamp = timestamp;
-        this.noOfStudent = noOfStudent;
         this.presentStudentList = presentStudentList;
         this.date=date;
     }
@@ -35,13 +33,6 @@ public class Attendance {
         this.timestamp = timestamp;
     }
 
-    public int getNoOfStudent() {
-        return noOfStudent;
-    }
-
-    public void setNoOfStudent(int noOfStudent) {
-        this.noOfStudent = noOfStudent;
-    }
 
     public HashMap<String, Resposnse> getPresentStudentList() {
         return presentStudentList;
@@ -55,7 +46,6 @@ public class Attendance {
     public String toString() {
         return "Attendance{" +
                 "timestamp=" + timestamp +
-                ", noOfStudent=" + noOfStudent +
                 ", presentStudentList=" + presentStudentList +
                 '}';
     }

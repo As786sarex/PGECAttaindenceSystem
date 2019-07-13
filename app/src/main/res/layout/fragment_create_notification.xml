@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#00AC95"
+    tools:context=".fragments.teacher_nav.CreateNotificationFragment">
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/createNotificationTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="128dp"
+        android:layout_marginEnd="32dp"
+        android:hint="Subject Code"
+        android:textStyle="bold"
+        android:textColor="@color/lightWhite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:met_textColorHint="@color/lightWhite" />
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/createNotificationBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:hint="Notification Body"
+        android:textStyle="bold"
+        android:textColor="@color/lightWhite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/createNotificationTitle"
+        app:met_textColorHint="@color/lightWhite" />
+
+    <Button
+        android:id="@+id/sentNotificationButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="8dp"
+        android:background="#D81B60"
+        android:text="Send Notification"
+        android:textColor="@color/lightWhite"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/createNotificationBody" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

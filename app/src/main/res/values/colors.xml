@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#82B1FF</color>
-    <color name="colorPrimaryDark">#82B1FF</color>
+    <color name="colorPrimary">#d50000</color>
+    <color name="colorPrimaryDark">#9b0000</color>
     <color name="colorAccent">#D81B60</color>
     <color name="lightWhite">#fefefe</color>
     <color name="colorBlack">#000000</color>
@@ -9,8 +9,7 @@
     <color name="lightBlue">#29B6F6</color>
     <color name="BarcodeActBackground">#D50001</color>
     <color name="BarcodeActStatusBarColor">#c4001d</color>
-    <string name="emailEditTransition">Email transition</string>
-    <string name="passEditTransition">password transition</string>
-    <string name="ACEditTransition">ACode transition</string>
+    <color name="redColor">#EEF30000</color>
+
 
 </resources>

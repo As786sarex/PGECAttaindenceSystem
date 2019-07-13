@@ -1,50 +1,48 @@
 package com.wildcardenter.myfab.pgecattaindencesystem.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Source;
-import com.itextpdf.kernel.colors.DeviceGray;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.Cell;
-import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.layout.element.Table;
-import com.itextpdf.layout.property.HorizontalAlignment;
-import com.itextpdf.layout.property.TextAlignment;
 import com.wildcardenter.myfab.pgecattaindencesystem.R;
+import com.wildcardenter.myfab.pgecattaindencesystem.fragments.student_nav.AnnouncementFragment;
 import com.wildcardenter.myfab.pgecattaindencesystem.fragments.student_nav.StudentGenerateReport;
 import com.wildcardenter.myfab.pgecattaindencesystem.fragments.student_nav.StudentLandingFragment;
 import com.wildcardenter.myfab.pgecattaindencesystem.helpers.Constants;
 import com.wildcardenter.myfab.pgecattaindencesystem.helpers.SharedPref;
-
-import java.io.File;
-import java.io.FileNotFoundException;
+import com.wildcardenter.myfab.pgecattaindencesystem.utils.NetworkStateReceiver;
 
 public class StudentLandingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "StudentLandingActivity";
-
+    TextView announcement;
     private DrawerLayout drawer;
     FirebaseAuth auth;
-    SharedPref sharedPref;
+    int count=0;
+    AlertDialog.Builder builder;
+    private NetworkStateReceiver receiver;
+    private AlertDialog dialog;
+    private IntentFilter filter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,29 +51,42 @@ public class StudentLandingActivity extends AppCompatActivity implements Navigat
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         auth = FirebaseAuth.getInstance();
-        sharedPref = SharedPref.getSharedPref(this, Constants.STUDENT_SUBCODES_FILE);
-        for (int i = 0; i < 7; i++) {
-            sharedPref.setData("CS301" + i, "CS301" + i, Constants.TYPE_STRING);
-        }
-
+        builder=new AlertDialog.Builder(this,R.style.dialog_anim);
         drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.Drawer_Opened, R.string.Drawer_Closed);
         toggle.syncState();
         NavigationView navigationView = findViewById(R.id.nav_view);
+        announcement= (TextView) MenuItemCompat.getActionView(navigationView.getMenu()
+                .findItem(R.id.student_nav_show_notice));
+        announcement.setGravity(Gravity.CENTER_VERTICAL);
+        announcement.setTypeface(null, Typeface.BOLD);
+        announcement.setTextSize(17f);
+        announcement.setTextColor(Color.parseColor("#9b0000"));
         navigationView.setNavigationItemSelectedListener(this);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.student_fragment_container, new StudentLandingFragment())
                     .commit();
             navigationView.setCheckedItem(R.id.startScan);
-            getSupportActionBar().setTitle("Scan qr Code");
+            getSupportActionBar().setTitle("Scan QR Code");
         }
-        getWindow().setStatusBarColor(getResources().getColor(R.color.lightBlue));
+        dialog=new AlertDialog.Builder(this, R.style.dialog_anim)
+                .setTitle("No Internet Connection!!!")
+                .setMessage("Make sure that you're connected to the internet.")
+                .setCancelable(false).create();
+        receiver=new NetworkStateReceiver(dialog);
+        filter=new IntentFilter();
     }
 
-    public void logOut(View view) {
+    public void logOut() {
         auth.signOut();
-        Toast.makeText(this, "Signed out successfully", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this,LoginActivity.class));
+        finish();
+    }
+
+    void setBadge(String count){
+        announcement.setText(String.format(" %s ", count));
+
     }
 
 
@@ -83,8 +94,13 @@ public class StudentLandingActivity extends AppCompatActivity implements Navigat
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.student_nav_scanQR) {
-            try {
+        if (id == R.id.student_nav_show_notice) {
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.student_fragment_container,
+                    new AnnouncementFragment())
+                    .commitNow();
+            getSupportActionBar().setTitle("Latest Announcements");
+           /* try {
                 String filename = Environment.getExternalStorageDirectory() + "/" + System.currentTimeMillis() + ".pdf";
                 File file = new File(filename);
                 PdfWriter writer = new PdfWriter(file);
@@ -124,10 +140,12 @@ public class StudentLandingActivity extends AppCompatActivity implements Navigat
                 });
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-            }
+            }*/
 
 
         } else if (id == R.id.addtemp) {
+            setBadge(String.valueOf(count));
+            count++;
             /*Map<String, Object> mp = new HashMap<>();
             for (int i = 0; i < 4; i++) {
                 mp.put(SimpleDateFormat.getDateTimeInstance()
@@ -151,6 +169,15 @@ public class StudentLandingActivity extends AppCompatActivity implements Navigat
                     .addToBackStack(null)
                     .commit();
             getSupportActionBar().setTitle("Scan qr Code");
+        }
+        else if (id==R.id.drawer_student_logout){
+            builder.setTitle("Log out?")
+                    .setMessage("You're about to log out of your account.")
+                    .setPositiveButton("Log out", (dialog, which) -> {
+                        logOut();
+                    })
+                    .setNegativeButton("Cancel",null)
+                    .create().show();
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -194,5 +221,17 @@ public class StudentLandingActivity extends AppCompatActivity implements Navigat
 
 
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(receiver,filter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
     }
 }

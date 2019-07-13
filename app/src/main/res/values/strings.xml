@@ -9,4 +9,7 @@
     <string name="cardTransition">cardview transition</string>
     <string name="Drawer_Opened">student drawer opened</string>
     <string name="Drawer_Closed">student drawer closed</string>
+    <string name="emailEditTransition">Email transition</string>
+    <string name="passEditTransition">password transition</string>
+    <string name="ACEditTransition">ACode transition</string>
 </resources>

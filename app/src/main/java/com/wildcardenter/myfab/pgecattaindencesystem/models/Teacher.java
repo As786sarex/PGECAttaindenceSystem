@@ -9,6 +9,9 @@ public class Teacher {
     private String accessCode;
     private HashMap<String,String> allottedSubjects;
 
+    public Teacher() {
+    }
+
     public Teacher(String name, String email,
                    boolean isVerified, String accessCode, HashMap<String, String> allottedSubjects) {
         this.name = name;

@@ -97,10 +97,8 @@ public class TeacherSignUpFragment extends Fragment {
                                 return;
                             }
                             if (sStudentCode.equals(String.valueOf(isCorrect))) {
-                                Toast.makeText(getContext(), "inside if equal", Toast.LENGTH_SHORT).show();
                                 FirebaseAuth.getInstance().createUserWithEmailAndPassword(semail, spass).addOnCompleteListener(getActivity(), task -> {
                                     if (task.isSuccessful()) {
-                                        Toast.makeText(getContext(), "task succe", Toast.LENGTH_SHORT).show();
                                         Teacher teacher = new Teacher(sname,  semail, false, sprivateAc, null);
                                         FirebaseDatabase.getInstance().getReference("Users")
                                                 .child("Teachers")
@@ -109,6 +107,12 @@ public class TeacherSignUpFragment extends Fragment {
                                         dialog.cancel();
                                         dialog.dismiss();
                                         Toast.makeText(getContext(), "SignUp Successful please Proceed to Log In", Toast.LENGTH_SHORT).show();
+                                    }
+                                    else
+                                    {
+                                        if (task.getException()!=null) {
+                                            Toast.makeText(getContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
                                     }
                                 });
                             }

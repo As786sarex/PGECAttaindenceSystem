@@ -21,6 +21,14 @@ public class SharedPref {
     private SharedPref(Context context,String filename) {
         sharedPreferences=context.getSharedPreferences(filename,Context.MODE_PRIVATE);
     }
+    public static void setNullMethod(){
+        if (pref!=null){
+            pref=null;
+        }
+    }
+    public void setNull(){
+        pref=null;
+    }
     public static SharedPref getSharedPref(Context context,String filename){
         if (pref==null){
             pref=new SharedPref(context,filename);

@@ -1,7 +1,9 @@
 package com.wildcardenter.myfab.pgecattaindencesystem.activities;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.animation.AnimationUtils;
@@ -10,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,12 +22,16 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.wildcardenter.myfab.pgecattaindencesystem.R;
+import com.wildcardenter.myfab.pgecattaindencesystem.utils.NetworkStateReceiver;
 
 public class SplashActivity extends AppCompatActivity {
     private ImageView spqr;
     FirebaseAuth auth;
     FirebaseUser user;
     Boolean isVerifiedAccount;
+    private NetworkStateReceiver receiver;
+    private AlertDialog dialog;
+    private IntentFilter filter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +42,12 @@ public class SplashActivity extends AppCompatActivity {
         user = auth.getCurrentUser();
         spqr = findViewById(R.id.spQr);
         spqr.startAnimation(AnimationUtils.loadAnimation(this, R.anim.bounce_off_anim));
+        dialog=new AlertDialog.Builder(this, R.style.dialog_anim)
+                .setTitle("No Internet Connection!!!")
+                .setMessage("Make sure that you're connected to the internet.")
+                .setCancelable(false).create();
+        receiver=new NetworkStateReceiver(dialog);
+        filter=new IntentFilter();
 
 
     }
@@ -42,7 +55,6 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        new Handler().postDelayed(() -> {
             if (user != null) {
                 FirebaseDatabase.getInstance().getReference("Users/Students").child(auth.getUid())
                         .child("accessCode").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -85,6 +97,18 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(new Intent(this, LoginActivity.class));
                 finish();
             }
-        }, 2000);
+
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(receiver,filter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
     }
 }

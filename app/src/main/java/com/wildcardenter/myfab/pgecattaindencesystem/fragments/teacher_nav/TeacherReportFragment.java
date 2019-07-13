@@ -3,6 +3,7 @@ package com.wildcardenter.myfab.pgecattaindencesystem.fragments.teacher_nav;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -23,10 +24,12 @@ public class TeacherReportFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_teacher_report, container, false);
+        View view=inflater.inflate(R.layout.fragment_teacher_report, container, false);
+
+        return view;
     }
 
 }

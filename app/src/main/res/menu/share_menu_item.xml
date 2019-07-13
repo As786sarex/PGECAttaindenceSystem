@@ -6,5 +6,9 @@
         android:id="@+id/qr_code_share"
         android:icon="@drawable/ic_share_black_24dp"
         app:showAsAction="ifRoom"/>
+    <item android:title="Delete Session"
+        android:id="@+id/delete_qr_code"
+        android:icon="@drawable/ic_delete_black_24dp"
+        app:showAsAction="ifRoom"/>
 
 </menu>

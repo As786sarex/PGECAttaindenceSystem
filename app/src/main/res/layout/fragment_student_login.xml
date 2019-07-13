@@ -109,6 +109,20 @@
                 app:met_floatingLabel="highlight"
                 app:met_floatingLabelAnimating="true"
                 app:met_floatingLabelText="Access Code" />
+            <TextView
+                android:id="@+id/student_forget_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="Forgot Password?"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:textColor="#EBFF7500"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@id/studentSignInPrivateAC"
+                app:layout_constraintTop_toBottomOf="@id/studentSignInPrivateAC" />
 
             <Button
                 android:id="@+id/studentSignInButton"
@@ -153,6 +167,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="Sign Up"
+                android:clickable="true"
                 android:textColor="#FF7500"
                 android:textSize="16sp"
                 android:textStyle="bold"
